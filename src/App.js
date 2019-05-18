@@ -9,7 +9,7 @@ import Home from './components/Home';
 import Character from './components/Character';
 import About from './components/About';
 
-import bg from './assets/rickandmortybg.png';
+import bg from './assets/rickandmortybg.svg';
 
 class App extends React.Component {
   constructor() {
