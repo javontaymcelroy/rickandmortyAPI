@@ -33,18 +33,18 @@ class App extends React.Component {
       });
   }
 
-  componentDidUpdate() {
-    axios
-      .get(
-        `https://rickandmortyapi.com/api/character/?page=${this.state.pageNum}`
-      )
-      .then(res => {
-        this.setState({ data: res.data.results });
-      })
-      .catch(err => {
-        console.log(err);
-      });
-  }
+  // componentDidUpdate() {
+  //   axios
+  //     .get(
+  //       `https://rickandmortyapi.com/api/character/?page=${this.state.pageNum}`
+  //     )
+  //     .then(res => {
+  //       this.setState({ data: res.data.results });
+  //     })
+  //     .catch(err => {
+  //       console.log(err);
+  //     });
+  // }
 
   pageChangeDecrement = e => {
     e.preventDefault();
