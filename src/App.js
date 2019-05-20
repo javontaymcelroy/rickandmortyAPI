@@ -8,19 +8,35 @@ import CharacterList from './components/CharacterList';
 import Home from './components/Home';
 import Character from './components/Character';
 import About from './components/About';
-
-import bg from './assets/rickandmortybg.svg';
+import bg from './assets/rickandmortybg.png';
 
 class App extends React.Component {
   constructor() {
     super();
     this.state = {
       data: [],
-      pageNum: 1
+      pageNum: 1,
+      totalPages: 0
     };
   }
 
   componentDidMount() {
+    axios
+      .get(
+        `https://rickandmortyapi.com/api/character/?page=${this.state.pageNum}`
+      )
+      .then(res => {
+        this.setState({
+          data: res.data.results,
+          totalPages: res.data.info.pages
+        });
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  }
+
+  fetchData() {
     axios
       .get(
         `https://rickandmortyapi.com/api/character/?page=${this.state.pageNum}`
@@ -31,34 +47,29 @@ class App extends React.Component {
       .catch(err => {
         console.log(err);
       });
+    console.log('fetching');
   }
-
-  // componentDidUpdate() {
-  //   axios
-  //     .get(
-  //       `https://rickandmortyapi.com/api/character/?page=${this.state.pageNum}`
-  //     )
-  //     .then(res => {
-  //       this.setState({ data: res.data.results });
-  //     })
-  //     .catch(err => {
-  //       console.log(err);
-  //     });
-  // }
 
   pageChangeDecrement = e => {
     e.preventDefault();
     if (this.state.pageNum === 1) return;
-    this.setState({
-      pageNum: --this.state.pageNum
-    });
+    this.setState(
+      prev => ({
+        pageNum: --prev.pageNum
+      }),
+      this.fetchData()
+    );
   };
 
   pageChangeIncrement = e => {
     e.preventDefault();
-    this.setState({
-      pageNum: ++this.state.pageNum
-    });
+    if (this.state.pageNum === this.state.totalPages) return;
+    this.setState(
+      prev => ({
+        pageNum: ++prev.pageNum
+      }),
+      this.fetchData()
+    );
   };
 
   render() {
@@ -72,10 +83,14 @@ class App extends React.Component {
             <NavLink exact to='/character-list'>
               Characters
             </NavLink>
+            <NavLink exact to='/episode-list'>
+              Episodes
+            </NavLink>
             <NavLink exact to='/about'>
               About
             </NavLink>
           </nav>
+
           <Route exact path='/' component={Home} />
           <Route
             exact
@@ -84,8 +99,10 @@ class App extends React.Component {
               <CharacterList
                 {...props}
                 data={this.state.data}
-                pageNum={this.state.pagNum}
-                pageChange={this.pageChange}
+                pageNum={this.state.pageNum}
+                totalPages={this.state.totalPages}
+                pageChangeIncrement={this.pageChangeIncrement}
+                pageChangeDecrement={this.pageChangeDecrement}
               />
             )}
           />

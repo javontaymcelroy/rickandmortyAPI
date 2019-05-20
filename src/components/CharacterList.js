@@ -24,7 +24,18 @@ function CharacterList(props) {
         })}
       </div>
       <div className='btn-wrapper'>
-        <button onClick={props.pageChange}>Prev</button> <button>Next</button>
+        <button
+          disabled={props.pageNum === 1}
+          onClick={props.pageChangeDecrement}
+        >
+          Prev
+        </button>
+        <button
+          disabled={props.pageNum === props.totalPages}
+          onClick={props.pageChangeIncrement}
+        >
+          Next
+        </button>
       </div>
     </>
   );
